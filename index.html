@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>RetroScan Checkout</title>
+<style>
+body {
+  font-family: Arial;
+  background:#0f0f0f;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+}
+
+.box {
+  width:100%;
+  max-width:420px;
+  background:#1c1c1c;
+  padding:25px;
+  border-radius:12px;
+}
+
+h2 { text-align:center; }
+
+select, button {
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  border-radius:8px;
+  border:none;
+}
+
+.price {
+  margin-top:15px;
+  font-size:18px;
+  color:#00d4ff;
+}
+
+button {
+  background:#0070ba;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>RetroScan Checkout</h2>
+
+  <select id="country" onchange="calc()">
+    <option value="SE">Sverige (1100 kr)</option>
+    <option value="US">USA (99 USD)</option>
+    <option value="EU">EU</option>
+    <option value="WW">Övrigt</option>
+  </select>
+
+  <div class="price" id="out"></div>
+
+  <button onclick="pay()">Betala med PayPal</button>
+</div>
+
+<script>
+const data = {
+  SE: { total: 1100, cur: "SEK" },
+  US: { total: 99, cur: "USD" },
+  EU: { total: 114, cur: "USD" },
+  WW: { total: 124, cur: "USD" }
+};
+
+function calc(){
+  let c = document.getElementById("country").value;
+  let d = data[c];
+  document.getElementById("out").innerHTML =
+    "Totalt: " + d.total + " " + d.cur;
+}
+
+function pay(){
+  let c = document.getElementById("country").value;
+  let d = data[c];
+
+  window.location.href =
+    "https://paypal.me/elinoalicia/" + d.total + d.cur;
+}
+
+calc();
+</script>
+
+</body>
+</html>
