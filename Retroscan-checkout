@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>RetroScan Checkout</title>
+<style>
+body {
+  font-family: Arial;
+  background:#0f0f0f;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+}
+
+.box {
+  width:100%;
+  max-width:420px;
+  background:#1c1c1c;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+
+h2 {
+  text-align:center;
+  margin-bottom:15px;
+}
+
+select, button {
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  border-radius:8px;
+  border:none;
+  font-size:16px;
+}
+
+.price {
+  margin-top:15px;
+  font-size:18px;
+  line-height:1.6;
+  color:#00d4ff;
+}
+
+button {
+  background:#0070ba;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:18px;
+}
+
+small {
+  display:block;
+  margin-top:10px;
+  color:#aaa;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>RetroScan Checkout</h2>
+
+  <label>Välj land</label>
+  <select id="country" onchange="update()">
+    <option value="SE">Sverige</option>
+    <option value="US">USA</option>
+    <option value="EU">EU</option>
+    <option value="WW">Övriga världen</option>
+  </select>
+
+  <div class="price" id="info"></div>
+
+  <button onclick="pay()">Betala med PayPal</button>
+
+  <small>Frakt varierar beroende på land</small>
+</div>
+
+<script>
+const data = {
+  SE: { product: 1100, shipping: 69, currency: "SEK" },
+  US: { product: 99, shipping: 20, currency: "USD" },
+  EU: { product: 99, shipping: 15, currency: "USD" },
+  WW: { product: 99, shipping: 25, currency: "USD" }
+};
+
+function update() {
+  let c = document.getElementById("country").value;
+  let d = data[c];
+  let total = d.product + d.shipping;
+
+  document.getElementById("info").innerHTML =
+    "Produkt: " + d.product + " " + d.currency + "<br>" +
+    "Frakt: " + d.shipping + " " + d.currency + "<br><br>" +
+    "<b>Totalt: " + total + " " + d.currency + "</b>";
+}
+
+function pay() {
+  let c = document.getElementById("country").value;
+  let d = data[c];
+  let total = d.product + d.shipping;
+
+  window.location.href =
+    "https://paypal.me/elinoalicia/" + total + d.currency;
+}
+
+update();
+</script>
+
+</body>
+</html>
