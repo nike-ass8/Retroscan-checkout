@@ -1,1 +1,287 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RetroScan DTC Finder</title>
+
+<style>
+
+body {
+    background:#111;
+    color:white;
+    font-family:Arial, sans-serif;
+    padding:20px;
+}
+
+.box {
+    max-width:700px;
+    margin:auto;
+    background:#222;
+    padding:25px;
+    border-radius:15px;
+}
+
+h1 {
+    color:#00e5ff;
+    text-align:center;
+}
+
+input, select {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    font-size:18px;
+    box-sizing:border-box;
+}
+
+button {
+    width:100%;
+    margin-top:15px;
+    padding:14px;
+    font-size:18px;
+    border:0;
+    border-radius:8px;
+    background:#00e5ff;
+    cursor:pointer;
+}
+
+button:hover {
+    background:#00ffaa;
+}
+
+.result {
+    margin-top:20px;
+    background:#333;
+    padding:20px;
+    border-radius:10px;
+}
+
+h2 {
+    color:#00ff88;
+}
+
+li {
+    margin-bottom:8px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="box">
+
+
+<h1>🔧 RetroScan DTC Finder</h1>
+
+
+<p>
+GM OBD1 ALDL Felkodssökning
+</p>
+
+
+<label>ECM</label>
+
+<select id="ecm">
+
+<option>1227165 L98 Corvette</option>
+<option>1227730 GM</option>
+<option>Övrig GM ECM</option>
+
+</select>
+
+
+
+<label>Felkod</label>
+
+<input id="code" 
+type="number" 
+placeholder="Exempel 32">
+
+
+
+<button onclick="searchDTC()">
+🔎 Sök felkod
+</button>
+
+
+
+<button onclick="askAI()">
+🤖 AI Analysera
+</button>
+
+
+
+<div id="result"></div>
+
+
+</div>
+
+
+
+<script>
+
+
+let database=[];
+
+
+fetch("gm_dtc.json")
+
+.then(response=>response.json())
+
+.then(data=>{
+
+database=data.codes;
+
+});
+
+
+
+let currentCode=null;
+
+
+
+function searchDTC(){
+
+
+let code=document.getElementById("code").value;
+
+
+let found =
+database.find(item=>item.code==code);
+
+
+
+let result=document.getElementById("result");
+
+
+
+if(found){
+
+
+currentCode=found;
+
+
+
+result.innerHTML=`
+
+<div class="result">
+
+<h2>
+DTC ${found.code}
+</h2>
+
+
+<h3>
+${found.name}
+</h3>
+
+
+<p>
+${found.description}
+</p>
+
+
+
+<h3>Kontrollera först:</h3>
+
+<ul>
+
+${found.checks.map(x=>`<li>${x}</li>`).join("")}
+
+</ul>
+
+
+
+<h3>Vanliga orsaker:</h3>
+
+<ul>
+
+${found.causes.map(x=>`<li>${x}</li>`).join("")}
+
+</ul>
+
+
+
+</div>
+
+`;
+
+}
+
+else{
+
+
+result.innerHTML=
+
+"<div class='result'>Ingen felkod hittades.</div>";
+
+}
+
+
+}
+
+
+
+function askAI(){
+
+
+let code=document.getElementById("code").value;
+
+let ecm=document.getElementById("ecm").value;
+
+
+
+let question=
+
+`Du är en GM OBD1 diagnostiker.
+
+Analysera denna felkod:
+
+Fordon:
+Chevrolet Corvette C4
+
+Motor:
+L98 5.7 TPI
+
+ECM:
+${ecm}
+
+ALDL:
+8192 baud
+
+Felkod:
+DTC ${code}
+
+Ge:
+- betydelse
+- vanliga orsaker
+- felsökningsordning
+- vad man bör mäta i ALDL-data
+- rekommenderad kontroll först`;
+
+
+
+window.open(
+
+"https://chat.openai.com/?q="
+
++encodeURIComponent(question)
+
+);
+
+
+}
+
+
+</script>
+
+
+</body>
+</html>
