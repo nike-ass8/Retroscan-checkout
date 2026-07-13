@@ -2,116 +2,999 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<title>RetroScan Checkout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RetroScan GM OBD1 DTC</title>
+
 <style>
+
 body {
-  font-family: Arial;
-  background:#0f0f0f;
-  color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  margin:0;
+    font-family: Arial, sans-serif;
+    background:#111;
+    color:white;
+    margin:0;
+    padding:20px;
 }
 
 .box {
-  width:100%;
-  max-width:420px;
-  background:#1c1c1c;
-  padding:25px;
-  border-radius:12px;
-  box-shadow:0 0 20px rgba(0,0,0,0.5);
+    max-width:600px;
+    margin:auto;
+    background:#222;
+    padding:25px;
+    border-radius:15px;
 }
 
-h2 {
-  text-align:center;
-  margin-bottom:15px;
+h1 {
+    text-align:center;
+    color:#00e5ff;
 }
 
-select, button {
-  width:100%;
-  padding:12px;
-  margin-top:12px;
-  border-radius:8px;
-  border:none;
-  font-size:16px;
-}
-
-.price {
-  margin-top:15px;
-  font-size:18px;
-  line-height:1.6;
-  color:#00d4ff;
+input {
+    width:100%;
+    box-sizing:border-box;
+    padding:14px;
+    font-size:22px;
+    text-align:center;
+    border-radius:8px;
+    border:0;
 }
 
 button {
-  background:#0070ba;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:18px;
+    width:100%;
+    margin-top:12px;
+    padding:14px;
+    font-size:18px;
+    border:0;
+    border-radius:8px;
+    background:#00e5ff;
+    cursor:pointer;
 }
 
-small {
-  display:block;
-  margin-top:10px;
-  color:#aaa;
-  text-align:center;
+button:hover {
+    background:#00ffaa;
 }
+
+
+.result {
+    margin-top:20px;
+    background:#333;
+    padding:20px;
+    border-radius:10px;
+}
+
+
+h2 {
+    color:#00ff88;
+}
+
+
+.section {
+    margin-top:15px;
+}
+
+
+li {
+    margin-bottom:8px;
+}
+
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="box">
-  <h2>RetroScan Checkout</h2>
 
-  <label>Välj land</label>
-  <select id="country" onchange="update()">
-    <option value="SE">Sverige</option>
-    <option value="US">USA</option>
-    <option value="EU">EU</option>
-    <option value="WW">Övriga världen</option>
-  </select>
 
-  <div class="price" id="info"></div>
+<h1>🔧 RetroScan DTC Sök</h1>
 
-  <button onclick="pay()">Betala med PayPal</button>
+<p>
+GM OBD1 felkod
+</p>
 
-  <small>Frakt varierar beroende på land</small>
+
+<input id="code" placeholder="Exempel: 32">
+
+
+<button onclick="searchDTC()">
+🔎 Sök felkod
+</button>
+
+
+<div id="result"></div>
+
+
 </div>
 
+
+
 <script>
-const data = {
-  SE: { product: 1100, shipping: 69, currency: "SEK" },
-  US: { product: 99, shipping: 20, currency: "USD" },
-  EU: { product: 99, shipping: 15, currency: "USD" },
-  WW: { product: 99, shipping: 25, currency: "USD" }
+
+
+const dtc = {
+
+
+"12":{
+name:"System OK",
+text:"ECM visar kod 12 när diagnossystemet fungerar och inga andra felkoder finns lagrade.",
+check:[
+"Ingen felsökning krävs",
+"Kontrollera om andra felkoder finns"
+],
+repair:[
+"Ingen åtgärd"
+]
+},
+
+
+
+"13":{
+name:"Oxygen Sensor Circuit Fault",
+text:"Fel i syresensorns signal eller krets.",
+check:[
+"Kontrollera O2-sensor",
+"Kontrollera kablage",
+"Kontrollera kontaktstycke"
+],
+repair:[
+"Reparera kablage",
+"Byt O2-sensor vid fel"
+]
+},
+
+
+
+"14":{
+name:"Coolant Temperature Sensor High",
+text:"Kylvätsketemperaturgivaren visar för hög signal.",
+check:[
+"Kontrollera temperaturgivare",
+"Mät givarmotstånd",
+"Kontrollera kablage"
+],
+repair:[
+"Byt givare vid fel",
+"Reparera kabelproblem"
+]
+},
+
+
+
+"15":{
+name:"Coolant Temperature Sensor Low",
+text:"Kylvätsketemperaturgivaren visar för låg signal.",
+check:[
+"Kontrollera CTS-givare",
+"Kontrollera kontakt",
+"Kontrollera kablage"
+],
+repair:[
+"Byt givare",
+"Reparera kabelbrott"
+]
+},
+
+
+
+"21":{
+name:"TPS Signal High",
+text:"Gasspjällssensorns signal är för hög.",
+check:[
+"Mät TPS-spänning",
+"Kontrollera justering",
+"Kontrollera kablage"
+],
+repair:[
+"Justera eller byt TPS",
+"Reparera kablage"
+]
+},
+
+
+
+"22":{
+name:"TPS Signal Low",
+text:"Gasspjällssensorns signal är för låg.",
+check:[
+"Kontrollera TPS-kontakt",
+"Mät signalspänning",
+"Kontrollera jord"
+],
+repair:[
+"Byt TPS",
+"Reparera kablage"
+]
+},
+
+
+
+"24":{
+name:"Vehicle Speed Sensor Fault",
+text:"Fel på fordonshastighetssignal.",
+check:[
+"Kontrollera VSS-givare",
+"Kontrollera kablage",
+"Kontrollera kontakt"
+],
+repair:[
+"Byt VSS",
+"Reparera kabelproblem"
+]
+},
+
+
+
+"32":{
+name:"EGR System Fault",
+text:"Fel i EGR-systemets funktion.",
+check:[
+"Kontrollera vakuumslangar",
+"Kontrollera EGR-solenoid",
+"Kontrollera EGR-ventil",
+"Kontrollera kablage"
+],
+repair:[
+"Reparera vakuumproblem",
+"Rengör eller byt EGR",
+"Byt defekt komponent"
+]
+},
+
+
+
+"33":{
+name:"MAP Sensor High",
+text:"MAP-signal för hög.",
+check:[
+"Kontrollera MAP-sensor",
+"Kontrollera vakuumslang",
+"Mät signal"
+],
+repair:[
+"Byt MAP-sensor",
+"Åtgärda vakuumproblem"
+]
+},
+
+
+
+"34":{
+name:"MAP Sensor Low",
+text:"MAP-signal för låg.",
+check:[
+"Kontrollera MAP-sensor",
+"Kontrollera kontakt",
+"Kontrollera kablage"
+],
+repair:[
+"Byt MAP-sensor",
+"Reparera kablage"
+]
+},
+
+
+"35":{
+name:"Idle Air Control (IAC) Error",
+text:"Fel i tomgångsregleringen.",
+check:[
+"Kontrollera IAC-ventil",
+"Kontrollera tomgångssystem",
+"Kontrollera kablage"
+],
+repair:[
+"Rengör IAC-ventil",
+"Byt IAC vid fel",
+"Åtgärda kabelproblem"
+]
+},
+
+
+"41":{
+name:"Cam Sensor Fault",
+text:"Fel på kamaxelreferens eller kamgivarsignal.",
+check:[
+"Kontrollera kamgivare",
+"Kontrollera kablage",
+"Kontrollera kontakt"
+],
+repair:[
+"Byt kamgivare vid fel",
+"Reparera kablage"
+]
+},
+
+
+"42":{
+name:"Electronic Spark Timing (EST) Fault",
+text:"Fel i elektronisk tändningsstyrning.",
+check:[
+"Kontrollera tändmodul",
+"Kontrollera EST-kabel",
+"Kontrollera referenssignal"
+],
+repair:[
+"Byt tändmodul vid fel",
+"Reparera kablage"
+]
+},
+
+
+"43":{
+name:"Electronic Spark Control Fault",
+text:"Fel i knackkontrollsystemet.",
+check:[
+"Kontrollera knackgivare",
+"Kontrollera ESC-krets",
+"Kontrollera kablage"
+],
+repair:[
+"Byt knackgivare vid fel",
+"Reparera kablage"
+]
+},
+
+
+"44":{
+name:"Lean Exhaust",
+text:"ECM upptäcker att motorn går för magert.",
+check:[
+"Kontrollera vakuumläckor",
+"Kontrollera bränsletryck",
+"Kontrollera O2-signal"
+],
+repair:[
+"Åtgärda luftläckor",
+"Kontrollera bränslesystem"
+]
+},
+
+
+"45":{
+name:"Rich Exhaust",
+text:"ECM upptäcker att motorn går för rikt.",
+check:[
+"Kontrollera O2-signal",
+"Kontrollera bränsletryck",
+"Kontrollera injektorer"
+],
+repair:[
+"Åtgärda bränsleproblem",
+"Byt felaktig sensor"
+]
+},
+
+
+"51":{
+name:"PROM Error",
+text:"Fel i ECM:s programmeringsminne (PROM).",
+check:[
+"Kontrollera PROM",
+"Kontrollera ECM"
+],
+repair:[
+"Byt eller programmera PROM",
+"Kontrollera ECM"
+]
+},
+
+
+"52":{
+name:"System Voltage Error",
+text:"Felaktig systemspänning.",
+check:[
+"Mät batterispänning",
+"Kontrollera generator",
+"Kontrollera jordpunkter"
+],
+repair:[
+"Åtgärda laddningsproblem",
+"Rengör jordanslutningar"
+]
+},
+
+
+"53":{
+name:"Over Voltage",
+text:"ECM upptäcker för hög spänning.",
+check:[
+"Kontrollera generator",
+"Mät laddspänning",
+"Kontrollera kablage"
+],
+repair:[
+"Reparera laddsystem",
+"Byt defekt komponent"
+]
+},
+
+
+"54":{
+name:"Fuel Pump Circuit Fault",
+text:"Fel i bränslepumpskretsen.",
+check:[
+"Kontrollera bränslepumpsrelä",
+"Kontrollera säkring",
+"Kontrollera kablage"
+],
+repair:[
+"Byt relä vid fel",
+"Reparera kabelproblem"
+]
+},
+
+
+"55":{
+name:"ECM Error",
+text:"Internt fel i ECM.",
+check:[
+"Kontrollera strömförsörjning",
+"Kontrollera jord",
+"Kontrollera anslutningar"
+],
+repair:[
+"Reparera anslutningar",
+"Byt ECM vid internt fel"
+]
+},
+
+
+"61":{
+name:"Fuel Control System Fault",
+text:"Fel i bränslestyrning eller relaterad krets.",
+check:[
+"Kontrollera bränslesystem",
+"Kontrollera sensorer",
+"Kontrollera kablage"
+],
+repair:[
+"Åtgärda bränsleproblem",
+"Reparera kablage"
+]
+},
+
+
+"62":{
+name:"A/C Pressure Sensor Fault",
+text:"Fel på luftkonditioneringens tryckgivare (modellberoende).",
+check:[
+"Kontrollera givare",
+"Kontrollera kontakt",
+"Kontrollera kablage"
+],
+repair:[
+"Byt givare",
+"Reparera kabelproblem"
+]
+},
+
+
+"63":{
+name:"MAP Sensor Circuit Fault",
+text:"Fel i MAP-sensorns krets.",
+check:[
+"Kontrollera MAP-sensor",
+"Kontrollera vakuum",
+"Kontrollera kablage"
+],
+repair:[
+"Byt MAP-sensor",
+"Reparera kablage"
+]
+},
+
+
+"64":{
+name:"MAP Sensor Circuit Fault",
+text:"Felaktig MAP-signal eller kretsproblem.",
+check:[
+"Kontrollera MAP-signal",
+"Kontrollera vakuumslang",
+"Kontrollera kontakt"
+],
+repair:[
+"Byt MAP-sensor",
+"Reparera anslutning"
+]
+},
+
+
+"65":{
+name:"Fuel Control Fault",
+text:"Fel i bränslestyrningen.",
+check:[
+"Kontrollera injektorer",
+"Kontrollera bränsletryck",
+"Kontrollera sensorer"
+],
+repair:[
+"Åtgärda bränslesystem",
+"Byt felaktig komponent"
+]
+},
+
+
+"66":{
+name:"A/C Pressure Sensor Fault",
+text:"Fel i tryckgivarkrets.",
+check:[
+"Kontrollera givare",
+"Kontrollera kablage"
+],
+repair:[
+"Byt givare",
+"Reparera kabel"
+]
+},
+
+
+"67":{
+name:"Cruise Control Fault",
+text:"Fel i farthållarsystem (modellberoende).",
+check:[
+"Kontrollera farthållarsystem",
+"Kontrollera brytare",
+"Kontrollera kablage"
+],
+repair:[
+"Reparera farthållarfel"
+]
+},
+
+
+"68":{
+name:"Transmission Fault",
+text:"Fel relaterat till växellådsstyrning (modellberoende).",
+check:[
+"Kontrollera växellådssignaler",
+"Kontrollera kablage"
+],
+repair:[
+"Åtgärda växellådsproblem"
+]
+},
+
+
+"69":{
+name:"Transmission Temperature Sensor Fault",
+text:"Fel på temperaturgivare i växellåda.",
+check:[
+"Kontrollera givare",
+"Kontrollera kablage"
+],
+repair:[
+"Byt givare",
+"Reparera kabel"
+]
+},
+
+
+"71":{
+name:"Coolant Temperature Sensor Fault",
+text:"Fel i temperaturgivarkrets.",
+check:[
+"Kontrollera givare",
+"Mät resistans",
+"Kontrollera kontakt"
+],
+repair:[
+"Byt givare",
+"Reparera kablage"
+]
+},
+
+
+"72":{
+name:"Vehicle Speed Sensor Fault",
+text:"Fel på hastighetssignal.",
+check:[
+"Kontrollera VSS",
+"Kontrollera kablage"
+],
+repair:[
+"Byt VSS",
+"Reparera kabel"
+]
+},
+
+
+"73":{
+name:"Transmission Pressure Control Fault",
+text:"Fel i tryckstyrning för automatlåda.",
+check:[
+"Kontrollera växellåda",
+"Kontrollera solenoid"
+],
+repair:[
+"Reparera växellåda"
+]
+},
+
+
+"74":{
+name:"Transmission Temperature Fault",
+text:"Felaktig temperaturinformation.",
+check:[
+"Kontrollera temperaturgivare",
+"Kontrollera kablage"
+],
+repair:[
+"Byt givare"
+]
+},
+
+
+"75":{
+name:"System Voltage Low",
+text:"Systemspänningen är för låg.",
+check:[
+"Kontrollera batteri",
+"Kontrollera generator",
+"Kontrollera jord"
+],
+repair:[
+"Ladda eller byt batteri",
+"Reparera laddsystem"
+]
+},
+
+
+"76":{
+name:"Transmission Control Fault",
+text:"Fel i växellådsstyrning.",
+check:[
+"Kontrollera styrsignaler",
+"Kontrollera kablage"
+],
+repair:[
+"Åtgärda växellådsproblem"
+]
+},
+
+
+"77":{
+name:"Cooling Fan Control Fault",
+text:"Fel i kylfläktstyrning.",
+check:[
+"Kontrollera relä",
+"Kontrollera fläkt",
+"Kontrollera kablage"
+],
+repair:[
+"Byt relä",
+"Reparera kabel"
+]
+},
+
+
+"78":{
+name:"Oil Pressure System Fault",
+text:"Fel i oljetryckssystem.",
+check:[
+"Kontrollera oljetryck",
+"Kontrollera givare"
+],
+repair:[
+"Byt givare",
+"Åtgärda oljetrycksproblem"
+]
+},
+
+
+"79":{
+name:"Transmission Fault",
+text:"Fel i växellådssystem.",
+check:[
+"Kontrollera växellåda",
+"Kontrollera givare"
+],
+repair:[
+"Reparera växellåda"
+]
+},
+
+
+"81":{
+name:"Quad Driver Fault",
+text:"Fel i ECM:s utgångsstyrning (Quad Driver).",
+check:[
+"Kontrollera anslutna komponenter",
+"Kontrollera kortslutningar",
+"Kontrollera kablage"
+],
+repair:[
+"Reparera kabelproblem",
+"Byt felaktig komponent"
+]
+},
+
+
+"82":{
+name:"Quad Driver Fault",
+text:"Fel i ECM:s styrutgång.",
+check:[
+"Kontrollera styrda komponenter",
+"Kontrollera kablage"
+],
+repair:[
+"Åtgärda kortslutning",
+"Reparera kabel"
+]
+},
+
+
+"83":{
+name:"Transmission Control Fault",
+text:"Fel i växellådsstyrning (modellberoende).",
+check:[
+"Kontrollera växellådssignaler",
+"Kontrollera kablage"
+],
+repair:[
+"Åtgärda växellådsproblem"
+]
+},
+
+
+"84":{
+name:"Vehicle Speed Sensor Fault",
+text:"Fel på hastighetssignal.",
+check:[
+"Kontrollera VSS",
+"Kontrollera kontakt",
+"Kontrollera kablage"
+],
+repair:[
+"Byt VSS",
+"Reparera kabel"
+]
+},
+
+
+"85":{
+name:"Transmission Fault",
+text:"Fel i automatlådans styrsystem.",
+check:[
+"Kontrollera givare",
+"Kontrollera solenoider"
+],
+repair:[
+"Reparera växellåda"
+]
+},
+
+
+"86":{
+name:"PCM/ECM Fault",
+text:"Fel relaterat till styrenhet.",
+check:[
+"Kontrollera strömförsörjning",
+"Kontrollera jord",
+"Kontrollera kontakter"
+],
+repair:[
+"Reparera anslutningar",
+"Byt ECM vid behov"
+]
+},
+
+
+"87":{
+name:"Quad Driver Fault",
+text:"Fel i ECM-utgång.",
+check:[
+"Kontrollera styrda komponenter",
+"Kontrollera kablage"
+],
+repair:[
+"Reparera kortslutning",
+"Byt komponent"
+]
+},
+
+
+"88":{
+name:"ECM Fault",
+text:"Internt fel i ECM.",
+check:[
+"Kontrollera matning",
+"Kontrollera jord",
+"Kontrollera kontakter"
+],
+repair:[
+"Byt ECM vid internt fel"
+]
+},
+
+
+"91":{
+name:"Oxygen Sensor Fault",
+text:"Fel på O2-sensor eller dess krets.",
+check:[
+"Kontrollera O2-sensor",
+"Kontrollera kablage",
+"Kontrollera jord"
+],
+repair:[
+"Byt sensor",
+"Reparera kablage"
+]
+},
+
+
+"92":{
+name:"Cam Sensor Fault",
+text:"Fel på kamgivarsignal.",
+check:[
+"Kontrollera kamgivare",
+"Kontrollera kablage"
+],
+repair:[
+"Byt givare",
+"Reparera kabel"
+]
+},
+
+
+"93":{
+name:"ECM Fault",
+text:"Fel i ECM eller intern krets.",
+check:[
+"Kontrollera ström",
+"Kontrollera jord"
+],
+repair:[
+"Kontrollera ECM"
+]
+},
+
+
+"94":{
+name:"Quad Driver Fault",
+text:"Fel i ECM:s styrkrets.",
+check:[
+"Kontrollera utgångar",
+"Kontrollera kablage"
+],
+repair:[
+"Reparera kortslutning"
+]
+},
+
+
+"95":{
+name:"ECM Fault",
+text:"Internt ECM-fel.",
+check:[
+"Kontrollera ECM-matning",
+"Kontrollera jord"
+],
+repair:[
+"Byt ECM vid fel"
+]
+},
+
+
+"96":{
+name:"VCC Circuit Fault",
+text:"Fel i spänningsomvandlare/styrkrets.",
+check:[
+"Kontrollera kablage",
+"Kontrollera ECM"
+],
+repair:[
+"Reparera krets",
+"Byt ECM vid behov"
+]
+},
+
+
+"97":{
+name:"Transmission Control Fault",
+text:"Fel i växellådsstyrning.",
+check:[
+"Kontrollera sensorer",
+"Kontrollera kablage"
+],
+repair:[
+"Åtgärda växellådsfel"
+]
+},
+
+
+"98":{
+name:"ECM Fault",
+text:"Internt fel i styrenhet.",
+check:[
+"Kontrollera ström",
+"Kontrollera jord"
+],
+repair:[
+"Byt ECM vid behov"
+]
+},
+
+
+"99":{
+name:"ECM Fault",
+text:"Styrenhetsfel.",
+check:[
+"Kontrollera ECM",
+"Kontrollera anslutningar"
+],
+repair:[
+"Byt ECM vid fel"
+]
+}
+
 };
+<script>
 
-function update() {
-  let c = document.getElementById("country").value;
-  let d = data[c];
-  let total = d.product + d.shipping;
+function searchDTC(){
 
-  document.getElementById("info").innerHTML =
-    "Produkt: " + d.product + " " + d.currency + "<br>" +
-    "Frakt: " + d.shipping + " " + d.currency + "<br><br>" +
-    "<b>Totalt: " + total + " " + d.currency + "</b>";
+let code=document.getElementById("code").value;
+
+let result=document.getElementById("result");
+
+
+if(dtc[code]){
+
+let d=dtc[code];
+
+
+result.innerHTML=`
+
+<div class="result">
+
+<h2>
+DTC ${code} - ${d.name}
+</h2>
+
+<p>${d.text}</p>
+
+
+<div class="section">
+
+<h3>Kontrollera:</h3>
+
+<ul>
+${d.check.map(x=>"<li>"+x+"</li>").join("")}
+</ul>
+
+</div>
+
+
+<div class="section">
+
+<h3>Åtgärd:</h3>
+
+<ul>
+${d.repair.map(x=>"<li>"+x+"</li>").join("")}
+</ul>
+
+</div>
+
+
+</div>
+
+`;
+
 }
 
-function pay() {
-  let c = document.getElementById("country").value;
-  let d = data[c];
-  let total = d.product + d.shipping;
+else{
 
-  window.location.href =
-    "https://paypal.me/elinoalicia/" + total + d.currency;
+result.innerHTML=
+"<div class='result'>Ingen felkod hittades</div>";
+
 }
 
-update();
+}
+
 </script>
 
 </body>
 </html>
+
+    
