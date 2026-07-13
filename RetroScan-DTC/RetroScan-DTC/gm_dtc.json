@@ -1,1 +1,222 @@
+{
+  "codes": [
 
+    {
+      "code": 12,
+      "name": "System OK",
+      "description": "ECM visar kod 12 när inga andra fel finns registrerade.",
+      "checks": [
+        "Ingen felsökning krävs"
+      ],
+      "causes": [
+        "Inget fel registrerat"
+      ]
+    },
+
+    {
+      "code": 13,
+      "name": "Oxygen Sensor Circuit Fault",
+      "description": "Problem med O2-sensorns signal.",
+      "checks": [
+        "Kontrollera O2-sensor",
+        "Kontrollera kablage",
+        "Kontrollera jord"
+      ],
+      "causes": [
+        "Trasig O2-sensor",
+        "Kabelbrott",
+        "Avgasläcka"
+      ]
+    },
+
+    {
+      "code": 14,
+      "name": "Coolant Temperature Sensor High",
+      "description": "Kylvätsketemperaturgivaren visar för hög signal.",
+      "checks": [
+        "Kontrollera CTS-givare",
+        "Mät resistans",
+        "Kontrollera kontakt"
+      ],
+      "causes": [
+        "Kortsluten givare",
+        "Kabelproblem"
+      ]
+    },
+
+    {
+      "code": 15,
+      "name": "Coolant Temperature Sensor Low",
+      "description": "Kylvätsketemperaturgivaren visar för låg signal.",
+      "checks": [
+        "Kontrollera CTS",
+        "Kontrollera kablage"
+      ],
+      "causes": [
+        "Avbrott i kabel",
+        "Dålig kontakt"
+      ]
+    },
+
+    {
+      "code": 21,
+      "name": "TPS Signal High",
+      "description": "Gasspjällssignal för hög.",
+      "checks": [
+        "Mät TPS-spänning",
+        "Kontrollera justering"
+      ],
+      "causes": [
+        "Defekt TPS",
+        "Kortslutning"
+      ]
+    },
+
+    {
+      "code": 22,
+      "name": "TPS Signal Low",
+      "description": "Gasspjällssignal för låg.",
+      "checks": [
+        "Kontrollera TPS-kontakt",
+        "Mät signalspänning"
+      ],
+      "causes": [
+        "TPS-fel",
+        "Kabelbrott"
+      ]
+    },
+
+    {
+      "code": 24,
+      "name": "Vehicle Speed Sensor Fault",
+      "description": "Fel på hastighetssignal från VSS.",
+      "checks": [
+        "Kontrollera VSS",
+        "Kontrollera kablage"
+      ],
+      "causes": [
+        "Trasig VSS",
+        "Kabelproblem"
+      ]
+    },
+
+    {
+      "code": 32,
+      "name": "EGR System Fault",
+      "description": "Fel i EGR-systemets funktion.",
+      "checks": [
+        "Kontrollera vakuumslangar",
+        "Kontrollera EGR-solenoid",
+        "Kontrollera kablage",
+        "Kontrollera EGR-ventil"
+      ],
+      "causes": [
+        "Sprucken vakuumslang",
+        "Defekt EGR-solenoid",
+        "Kärvande EGR-ventil"
+      ]
+    },
+
+    {
+      "code": 33,
+      "name": "MAP Sensor High",
+      "description": "MAP-signalen är för hög.",
+      "checks": [
+        "Kontrollera MAP-sensor",
+        "Kontrollera vakuum",
+        "Mät signal"
+      ],
+      "causes": [
+        "MAP-fel",
+        "Kabelproblem"
+      ]
+    },
+
+    {
+      "code": 34,
+      "name": "MAP Sensor Low",
+      "description": "MAP-signalen är för låg.",
+      "checks": [
+        "Kontrollera MAP-sensor",
+        "Kontrollera kontakt"
+      ],
+      "causes": [
+        "MAP-sensor fel",
+        "Avbrott i kabel"
+      ]
+    },
+
+    {
+      "code": 41,
+      "name": "Cam Signal Fault",
+      "description": "Fel på kamreferens eller relaterad signal.",
+      "checks": [
+        "Kontrollera givare",
+        "Kontrollera kablage"
+      ],
+      "causes": [
+        "Defekt givare",
+        "Kabelproblem"
+      ]
+    },
+
+    {
+      "code": 42,
+      "name": "EST Ignition Fault",
+      "description": "Fel i elektronisk tändningsstyrning.",
+      "checks": [
+        "Kontrollera tändmodul",
+        "Kontrollera EST-kabel",
+        "Kontrollera referenspuls"
+      ],
+      "causes": [
+        "Tändmodul",
+        "Kabelproblem"
+      ]
+    },
+
+    {
+      "code": 43,
+      "name": "ESC Knock Control Fault",
+      "description": "Fel i knackkontrollsystem.",
+      "checks": [
+        "Kontrollera knackgivare",
+        "Kontrollera kablage"
+      ],
+      "causes": [
+        "Knacksensor",
+        "ESC-fel"
+      ]
+    },
+
+    {
+      "code": 44,
+      "name": "Lean Exhaust",
+      "description": "ECM upptäcker mager blandning.",
+      "checks": [
+        "Kontrollera vakuumläckor",
+        "Kontrollera bränsletryck",
+        "Kontrollera O2-signal"
+      ],
+      "causes": [
+        "Tjuvluft",
+        "Lågt bränsletryck"
+      ]
+    },
+
+    {
+      "code": 45,
+      "name": "Rich Exhaust",
+      "description": "ECM upptäcker rik blandning.",
+      "checks": [
+        "Kontrollera O2-signal",
+        "Kontrollera bränsletryck"
+      ],
+      "causes": [
+        "Läckande injektor",
+        "För högt bränsletryck"
+      ]
+    }
+
+  ]
+}
