@@ -27,7 +27,7 @@ causes:[
 "Dåliga anslutningar"
 ],
 check:[
-"Kontrollera strömförsörjning",
+"Kontrollera matning",
 "Kontrollera jord",
 "Kontrollera kontakter"
 ],
@@ -40,7 +40,7 @@ repair:[
 
 "61":{
 name:"Fuel Control System Fault",
-description:"Fel i bränslestyrning eller relaterad krets.",
+description:"Fel i bränslestyrning.",
 causes:[
 "Sensorfel",
 "Bränsleproblem",
@@ -60,11 +60,10 @@ repair:[
 
 "62":{
 name:"A/C Pressure Sensor Fault",
-description:"Fel på luftkonditioneringens tryckgivare (modellberoende).",
+description:"Fel på tryckgivare för luftkonditionering (modellberoende).",
 causes:[
 "Defekt givare",
-"Kabelproblem",
-"Dålig kontakt"
+"Kabelproblem"
 ],
 check:[
 "Kontrollera givare",
@@ -82,17 +81,17 @@ name:"MAP Sensor Circuit Fault",
 description:"Fel i MAP-sensorns krets.",
 causes:[
 "Defekt MAP",
-"Kabelbrott",
-"Kontaktproblem"
+"Kabelproblem",
+"Dålig kontakt"
 ],
 check:[
-"Kontrollera MAP-signal",
-"Kontrollera kablage",
-"Kontrollera vakuum"
+"Kontrollera MAP-sensor",
+"Kontrollera vakuum",
+"Kontrollera kablage"
 ],
 repair:[
 "Byt MAP-sensor",
-"Reparera kablage"
+"Reparera kabel"
 ]
 },
 
@@ -106,13 +105,13 @@ causes:[
 "Kabelproblem"
 ],
 check:[
-"Kontrollera MAP",
-"Kontrollera vakuumslang",
-"Mät signal"
+"Mät MAP-signal",
+"Kontrollera vakuum",
+"Kontrollera kontakt"
 ],
 repair:[
 "Byt sensor",
-"Reparera anslutning"
+"Reparera kablage"
 ]
 },
 
@@ -140,7 +139,7 @@ repair:[
 name:"A/C Pressure Sensor Fault",
 description:"Fel i tryckgivarkrets.",
 causes:[
-"Fel på givare",
+"Defekt givare",
 "Kabelproblem"
 ],
 check:[
@@ -148,8 +147,7 @@ check:[
 "Kontrollera kablage"
 ],
 repair:[
-"Byt givare",
-"Reparera kabel"
+"Byt givare"
 ]
 },
 
@@ -159,8 +157,7 @@ name:"Cruise Control Fault",
 description:"Fel i farthållarsystem (modellberoende).",
 causes:[
 "Brytarfel",
-"Kabelproblem",
-"Styrfel"
+"Kabelproblem"
 ],
 check:[
 "Kontrollera brytare",
@@ -271,7 +268,7 @@ function searchDTC(){
 let code=document.getElementById("code").value.trim();
 
 if(code.startsWith("0")){
-    code=code.replace(/^0+/,"");
+code=code.replace(/^0+/,"");
 }
 
 
@@ -293,21 +290,18 @@ result.innerHTML=`
 
 
 <h3>Vanliga orsaker:</h3>
-
 <ul>
 ${d.causes.map(x=>"<li>"+x+"</li>").join("")}
 </ul>
 
 
 <h3>Kontrollera först:</h3>
-
 <ul>
 ${d.check.map(x=>"<li>"+x+"</li>").join("")}
 </ul>
 
 
 <h3>Åtgärd:</h3>
-
 <ul>
 ${d.repair.map(x=>"<li>"+x+"</li>").join("")}
 </ul>
@@ -318,15 +312,17 @@ ${d.repair.map(x=>"<li>"+x+"</li>").join("")}
 `;
 
 }
+
 else{
 
-result.innerHTML=
-`
+result.innerHTML=`
+
 <div class="result">
 Ingen felkod hittades.
-<br>
-Kontrollera att du skriver t.ex. 32.
+<br><br>
+Testa exempelvis: 32, 42 eller 45
 </div>
+
 `;
 
 }
