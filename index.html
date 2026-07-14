@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -73,14 +74,15 @@ li {
 }
 
 .note {
-    margin-top:15px;
-    font-size:14px;
     color:#aaa;
+    font-size:14px;
+    margin-top:15px;
 }
 
 </style>
 
 </head>
+
 
 <body>
 
@@ -92,7 +94,7 @@ li {
 
 
 <p>
-Skriv GM felkod:
+GM OBD1 tvåsiffrig felkod:
 </p>
 
 
@@ -108,7 +110,7 @@ Skriv GM felkod:
 
 
 <div class="note">
-GM OBD1 tvåsiffriga felkoder. Kontrollera alltid ström, jord och kontakter innan komponentbyte.
+GM OBD1 felkodsguide för ALDL-system. Kontrollera alltid ström, jord och kontakter innan komponentbyte.
 </div>
 
 
@@ -124,13 +126,13 @@ const dtc = {
 
 "12":{
 name:"System OK",
-description:"ECM visar kod 12 när diagnossystemet fungerar och inga andra fel finns lagrade.",
+description:"ECM visar kod 12 när diagnossystemet fungerar och inga andra felkoder finns lagrade.",
 causes:[
 "Inga fel lagrade",
-"Normalt vid diagnostik"
+"Normal diagnostisk startkod"
 ],
 check:[
-"Kontrollera om fler felkoder finns"
+"Kontrollera om andra felkoder finns"
 ],
 repair:[
 "Ingen åtgärd"
@@ -143,12 +145,12 @@ name:"Oxygen Sensor Circuit Fault",
 description:"Fel i syresensorns signal eller krets.",
 causes:[
 "Defekt O2-sensor",
-"Trasigt kablage",
+"Kabelbrott",
 "Dålig kontakt"
 ],
 check:[
 "Kontrollera O2-sensor",
-"Mät signal",
+"Kontrollera signal",
 "Kontrollera jord och kablage"
 ],
 repair:[
@@ -162,9 +164,9 @@ repair:[
 name:"Coolant Temperature Sensor High",
 description:"Kylvätsketemperaturgivaren visar för hög signal.",
 causes:[
-"Fel på temperaturgivare",
-"Kabelbrott",
-"Dålig kontakt"
+"Defekt temperaturgivare",
+"Kabelproblem",
+"Kontaktproblem"
 ],
 check:[
 "Mät givarmotstånd",
@@ -196,6 +198,86 @@ repair:[
 "Reparera kabel"
 ]
 },
+"16":{
+name:"Distributor Reference Pulse Fault",
+description:"ECM får ingen korrekt referenspuls från tändsystemet.",
+causes:[
+"Fel på tändmodul",
+"Fel på referenssignal",
+"Kabelproblem",
+"Dålig kontakt"
+],
+check:[
+"Kontrollera tändmodul",
+"Kontrollera referenssignal",
+"Kontrollera kablage mellan ECM och tändsystem",
+"Kontrollera jordpunkter"
+],
+repair:[
+"Reparera kablage",
+"Byt tändmodul vid fel"
+]
+},
+
+
+"17":{
+name:"Cam Signal Fault",
+description:"Fel på kamaxelreferenssignal (modellberoende).",
+causes:[
+"Defekt givare",
+"Kabelproblem",
+"Dålig kontakt"
+],
+check:[
+"Kontrollera kamgivare",
+"Kontrollera signal",
+"Kontrollera kablage"
+],
+repair:[
+"Byt givare",
+"Reparera kablage"
+]
+},
+
+
+"18":{
+name:"Crank Reference Fault",
+description:"Fel på vevaxelreferenssignal (modellberoende).",
+causes:[
+"Fel på givare",
+"Kabelproblem",
+"Felaktig signal"
+],
+check:[
+"Kontrollera vevaxelgivare",
+"Kontrollera kablage",
+"Kontrollera kontakt"
+],
+repair:[
+"Byt givare",
+"Reparera kabel"
+]
+},
+
+
+"19":{
+name:"Crank Sensor Fault",
+description:"Fel på vevaxelgivarsignal.",
+causes:[
+"Defekt vevaxelgivare",
+"Kabelbrott",
+"Dålig kontakt"
+],
+check:[
+"Kontrollera givare",
+"Mät signal",
+"Kontrollera kablage"
+],
+repair:[
+"Byt givare",
+"Reparera kabel"
+]
+},
 
 
 "21":{
@@ -213,7 +295,7 @@ check:[
 ],
 repair:[
 "Justera TPS",
-"Byt TPS vid fel",
+"Byt TPS",
 "Reparera kablage"
 ]
 },
@@ -223,43 +305,179 @@ repair:[
 name:"TPS Signal Low",
 description:"Gasspjällssensorns signal är för låg.",
 causes:[
-"Dålig TPS",
 "Dålig jord",
-"Kabelbrott"
+"Defekt TPS",
+"Kabelproblem"
 ],
 check:[
 "Kontrollera TPS-signal",
 "Kontrollera jord",
-"Kontrollera kontakt"
+"Kontrollera kablage"
 ],
 repair:[
 "Byt TPS",
-"Reparera kablage"
+"Reparera kabel"
 ]
 },
-"24":{
-name:"Vehicle Speed Sensor Fault",
-description:"Fel på fordonshastighetssignal från VSS-givaren.",
+
+
+"23":{
+name:"MAT Sensor Fault",
+description:"Fel på lufttemperaturgivaren (Manifold Air Temperature).",
 causes:[
-"Defekt hastighetsgivare",
-"Trasigt kablage",
+"Defekt MAT-sensor",
+"Avbrott i kabel",
+"Kortslutning",
 "Dålig kontakt"
 ],
 check:[
-"Kontrollera VSS-givare",
+"Kontrollera MAT-sensor",
+"Mät resistans",
+"Kontrollera jord och signal"
+],
+repair:[
+"Byt MAT-sensor",
+"Reparera kablage"
+]
+},
+
+
+"24":{
+name:"Vehicle Speed Sensor Fault",
+description:"Fel på fordonshastighetssignal.",
+causes:[
+"Defekt VSS-givare",
+"Kabelproblem",
+"Dålig kontakt"
+],
+check:[
+"Kontrollera VSS",
 "Kontrollera kablage",
 "Kontrollera kontaktstycke"
 ],
 repair:[
-"Byt VSS-givare",
+"Byt VSS",
+"Reparera kabel"
+]
+},
+
+
+"25":{
+name:"MAT Sensor Signal Fault",
+description:"Felaktig signal från lufttemperaturgivaren.",
+causes:[
+"Fel på MAT-sensor",
+"Kabelproblem",
+"Felaktig anslutning"
+],
+check:[
+"Kontrollera sensor",
+"Mät signal",
+"Kontrollera kablage"
+],
+repair:[
+"Byt sensor",
+"Reparera kabel"
+]
+},
+
+
+"26":{
+name:"Quad Driver Module Fault",
+description:"ECM:s utgångsdrivare har upptäckt fel.",
+causes:[
+"Kortslutning i ansluten komponent",
+"Fel på styrd komponent",
+"Kabelproblem"
+],
+check:[
+"Kontrollera komponenter styrda av ECM",
+"Kontrollera kortslutningar",
+"Kontrollera kablage"
+],
+repair:[
+"Reparera kortslutning",
+"Byt felaktig komponent"
+]
+},
+
+
+"27":{
+name:"Quad Driver Fault",
+description:"Fel i ECM:s utgångsstyrning.",
+causes:[
+"Kortslutning",
+"Defekt relä eller solenoid",
+"Kabelproblem"
+],
+check:[
+"Kontrollera ECM-utgångar",
+"Kontrollera anslutna komponenter"
+],
+repair:[
+"Åtgärda kortslutning",
 "Reparera kablage"
 ]
 },
 
 
+"28":{
+name:"Transmission Switch Fault",
+description:"Fel på växellådssignal (modellberoende).",
+causes:[
+"Fel på brytare",
+"Kabelproblem",
+"Kontaktfel"
+],
+check:[
+"Kontrollera växellådssignal",
+"Kontrollera kablage"
+],
+repair:[
+"Byt brytare",
+"Reparera kabel"
+]
+},
+
+
+"29":{
+name:"Transmission Switch Fault",
+description:"Fel på växellådsrelaterad signal.",
+causes:[
+"Sensorfel",
+"Kabelproblem"
+],
+check:[
+"Kontrollera givare",
+"Kontrollera anslutningar"
+],
+repair:[
+"Byt givare",
+"Reparera kabel"
+]
+},
+
+
+"31":{
+name:"System Fault",
+description:"Systemrelaterat fel (modellberoende).",
+causes:[
+"Sensorproblem",
+"Kabelproblem",
+"ECM-fel"
+],
+check:[
+"Kontrollera övriga felkoder",
+"Kontrollera kablage",
+"Kontrollera ECM"
+],
+repair:[
+"Åtgärda grundfelet"
+]
+},
 "32":{
 name:"EGR System Fault",
-description:"ECM upptäcker ett fel i EGR-systemets funktion.",
+description:"ECM upptäcker fel i EGR-systemets funktion.",
 causes:[
 "Defekt EGR-ventil",
 "Trasig vakuumslang",
@@ -268,7 +486,7 @@ causes:[
 ],
 check:[
 "Kontrollera vakuumslangar",
-"Kontrollera EGR-ventilens funktion",
+"Kontrollera EGR-ventil",
 "Kontrollera EGR-solenoid",
 "Kontrollera kablage"
 ],
@@ -285,18 +503,17 @@ name:"MAP Sensor High",
 description:"MAP-sensorns signal är för hög.",
 causes:[
 "Defekt MAP-sensor",
-"Felaktig matningsspänning",
+"Felaktig matning",
 "Kabelproblem"
 ],
 check:[
 "Kontrollera MAP-sensor",
-"Kontrollera vakuumslang",
+"Kontrollera vakuum",
 "Mät signalspänning"
 ],
 repair:[
 "Byt MAP-sensor",
-"Åtgärda vakuumproblem",
-"Reparera kablage"
+"Åtgärda vakuumproblem"
 ]
 },
 
@@ -311,12 +528,12 @@ causes:[
 ],
 check:[
 "Kontrollera MAP-signal",
-"Kontrollera vakuum",
+"Kontrollera vakuumslang",
 "Kontrollera kontakt"
 ],
 repair:[
 "Byt MAP-sensor",
-"Reparera anslutning"
+"Reparera kablage"
 ]
 },
 
@@ -330,7 +547,7 @@ causes:[
 "Kabelproblem"
 ],
 check:[
-"Kontrollera IAC-ventil",
+"Kontrollera IAC",
 "Kontrollera tomgångssystem",
 "Kontrollera kablage"
 ],
@@ -341,22 +558,98 @@ repair:[
 },
 
 
+"36":{
+name:"MAF Burnoff / MAF Circuit Fault",
+description:"Fel på luftmassemätarens krets eller burnoff-funktion.",
+causes:[
+"Fel på MAF-sensor",
+"Smutsig MAF",
+"Kabelproblem"
+],
+check:[
+"Kontrollera MAF",
+"Kontrollera kablage",
+"Kontrollera matning"
+],
+repair:[
+"Rengör eller byt MAF",
+"Reparera kabel"
+]
+},
+
+
+"37":{
+name:"Brake Switch Fault",
+description:"Fel på bromssignal (modellberoende).",
+causes:[
+"Fel på bromsbrytare",
+"Kabelproblem"
+],
+check:[
+"Kontrollera bromsbrytare",
+"Kontrollera signal"
+],
+repair:[
+"Byt brytare",
+"Reparera kabel"
+]
+},
+
+
+"38":{
+name:"Brake Switch Fault",
+description:"Fel i bromssignalkrets.",
+causes:[
+"Brytarfel",
+"Kabelproblem"
+],
+check:[
+"Kontrollera bromsbrytare",
+"Kontrollera kontakt"
+],
+repair:[
+"Byt brytare",
+"Reparera kabel"
+]
+},
+
+
+"39":{
+name:"Torque Converter Clutch Fault",
+description:"Fel i lockup-styrning för automatlåda.",
+causes:[
+"Fel på TCC-solenoid",
+"Kabelproblem",
+"Växellådsfel"
+],
+check:[
+"Kontrollera TCC-solenoid",
+"Kontrollera kablage",
+"Kontrollera växellådssignal"
+],
+repair:[
+"Byt solenoid",
+"Reparera kablage"
+]
+},
+
+
 "41":{
 name:"Cam Sensor Fault",
 description:"Fel på kamaxelreferens eller kamgivarsignal.",
 causes:[
-"Defekt givare",
-"Fel på kablage",
+"Defekt kamgivare",
+"Kabelproblem",
 "Dålig kontakt"
 ],
 check:[
 "Kontrollera kamgivare",
-"Kontrollera kontakt",
-"Mät signal"
+"Kontrollera signal",
+"Kontrollera kablage"
 ],
 repair:[
 "Byt givare",
-"Reparera kablage"
+"Reparera kabel"
 ]
 },
 
@@ -365,14 +658,14 @@ repair:[
 name:"Electronic Spark Timing (EST) Fault",
 description:"Fel i elektronisk tändningsstyrning.",
 causes:[
-"Fel på tändmodul",
+"Defekt tändmodul",
 "EST-kabel problem",
 "Dålig jord"
 ],
 check:[
 "Kontrollera tändmodul",
 "Kontrollera EST-ledning",
-"Kontrollera jordpunkter"
+"Kontrollera jord"
 ],
 repair:[
 "Byt tändmodul",
@@ -386,7 +679,7 @@ name:"Electronic Spark Control Fault",
 description:"Fel i knackkontrollsystemet.",
 causes:[
 "Defekt knackgivare",
-"Fel på ESC-krets",
+"ESC-krets fel",
 "Kabelproblem"
 ],
 check:[
@@ -436,7 +729,7 @@ check:[
 ],
 repair:[
 "Åtgärda bränsleproblem",
-"Byt felaktig sensor"
+"Byt felaktig komponent"
 ]
 },
 
@@ -455,7 +748,7 @@ check:[
 ],
 repair:[
 "Byt eller programmera PROM",
-"Kontrollera ECM"
+"Byt ECM vid fel"
 ]
 },
 
@@ -465,8 +758,8 @@ name:"System Voltage Error",
 description:"Felaktig systemspänning.",
 causes:[
 "Laddningsproblem",
-"Dålig jord",
-"Generatorfel"
+"Generatorfel",
+"Dålig jord"
 ],
 check:[
 "Mät batterispänning",
@@ -475,7 +768,7 @@ check:[
 ],
 repair:[
 "Åtgärda laddsystem",
-"Reparera jordanslutningar"
+"Rengör jordpunkter"
 ]
 },
 
@@ -485,8 +778,7 @@ name:"Over Voltage",
 description:"ECM upptäcker för hög systemspänning.",
 causes:[
 "Generatorfel",
-"Spänningsregulator fel",
-"Kabelproblem"
+"Spänningsregulator fel"
 ],
 check:[
 "Mät laddspänning",
@@ -525,7 +817,7 @@ causes:[
 "Dåliga anslutningar"
 ],
 check:[
-"Kontrollera strömförsörjning",
+"Kontrollera matning",
 "Kontrollera jord",
 "Kontrollera kontakter"
 ],
@@ -538,7 +830,7 @@ repair:[
 
 "61":{
 name:"Fuel Control System Fault",
-description:"Fel i bränslestyrning eller relaterad krets.",
+description:"Fel i bränslestyrning.",
 causes:[
 "Sensorfel",
 "Bränsleproblem",
@@ -558,11 +850,10 @@ repair:[
 
 "62":{
 name:"A/C Pressure Sensor Fault",
-description:"Fel på luftkonditioneringens tryckgivare (modellberoende).",
+description:"Fel på tryckgivare för luftkonditionering (modellberoende).",
 causes:[
 "Defekt givare",
-"Kabelproblem",
-"Dålig kontakt"
+"Kabelproblem"
 ],
 check:[
 "Kontrollera givare",
@@ -580,17 +871,17 @@ name:"MAP Sensor Circuit Fault",
 description:"Fel i MAP-sensorns krets.",
 causes:[
 "Defekt MAP",
-"Kabelbrott",
-"Kontaktproblem"
+"Kabelproblem",
+"Dålig kontakt"
 ],
 check:[
-"Kontrollera MAP-signal",
-"Kontrollera kablage",
-"Kontrollera vakuum"
+"Kontrollera MAP-sensor",
+"Kontrollera vakuum",
+"Kontrollera kablage"
 ],
 repair:[
 "Byt MAP-sensor",
-"Reparera kablage"
+"Reparera kabel"
 ]
 },
 
@@ -604,13 +895,13 @@ causes:[
 "Kabelproblem"
 ],
 check:[
-"Kontrollera MAP",
-"Kontrollera vakuumslang",
-"Mät signal"
+"Mät MAP-signal",
+"Kontrollera vakuum",
+"Kontrollera kontakt"
 ],
 repair:[
 "Byt sensor",
-"Reparera anslutning"
+"Reparera kablage"
 ]
 },
 
@@ -638,7 +929,7 @@ repair:[
 name:"A/C Pressure Sensor Fault",
 description:"Fel i tryckgivarkrets.",
 causes:[
-"Fel på givare",
+"Defekt givare",
 "Kabelproblem"
 ],
 check:[
@@ -646,8 +937,7 @@ check:[
 "Kontrollera kablage"
 ],
 repair:[
-"Byt givare",
-"Reparera kabel"
+"Byt givare"
 ]
 },
 
@@ -657,8 +947,7 @@ name:"Cruise Control Fault",
 description:"Fel i farthållarsystem (modellberoende).",
 causes:[
 "Brytarfel",
-"Kabelproblem",
-"Styrfel"
+"Kabelproblem"
 ],
 check:[
 "Kontrollera brytare",
@@ -769,7 +1058,7 @@ function searchDTC(){
 let code=document.getElementById("code").value.trim();
 
 if(code.startsWith("0")){
-    code=code.replace(/^0+/,"");
+code=code.replace(/^0+/,"");
 }
 
 
@@ -791,21 +1080,18 @@ result.innerHTML=`
 
 
 <h3>Vanliga orsaker:</h3>
-
 <ul>
 ${d.causes.map(x=>"<li>"+x+"</li>").join("")}
 </ul>
 
 
 <h3>Kontrollera först:</h3>
-
 <ul>
 ${d.check.map(x=>"<li>"+x+"</li>").join("")}
 </ul>
 
 
 <h3>Åtgärd:</h3>
-
 <ul>
 ${d.repair.map(x=>"<li>"+x+"</li>").join("")}
 </ul>
@@ -816,15 +1102,17 @@ ${d.repair.map(x=>"<li>"+x+"</li>").join("")}
 `;
 
 }
+
 else{
 
-result.innerHTML=
-`
+result.innerHTML=`
+
 <div class="result">
 Ingen felkod hittades.
-<br>
-Kontrollera att du skriver t.ex. 32.
+<br><br>
+Testa exempelvis: 32, 42 eller 45
 </div>
+
 `;
 
 }
@@ -835,3 +1123,4 @@ Kontrollera att du skriver t.ex. 32.
 
 </body>
 </html>
+
